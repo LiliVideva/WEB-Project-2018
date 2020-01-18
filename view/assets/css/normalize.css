@@ -1,0 +1,59 @@
+html {
+  font-family: sans-serif;
+}
+
+
+body {
+  margin: 0;
+}
+
+footer,
+header,
+main,
+section,
+nav {
+  display: block;
+}
+
+a {
+  background-color: transparent;
+}
+
+a:active,
+a:hover {
+  outline: 0;
+}
+
+b,
+strong {
+  font-weight: bold;
+}
+
+h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+
+button,
+input,
+select,{
+  color: inherit; /* 1 */
+  font: inherit; /* 2 */
+  margin: 0; /* 3 */
+}
+
+button,
+select {
+  text-transform: none;
+}
+
+button,
+html input[type="button"],
+input[type="submit"] {
+  cursor: pointer; 
+}
+
+input[type="radio"] {
+  box-sizing: border-box; 
+  padding: 0;
+}

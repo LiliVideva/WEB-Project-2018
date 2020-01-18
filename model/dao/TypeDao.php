@@ -4,17 +4,29 @@ namespace model\dao;
 
 use model\Type;
 
-require_once "AbstractDao.php";
-require_once "..\Type.php";
 
-class TypeDao extends AbstractDao
+/**
+ * Class TypeDao
+ * @package model\dao
+ */
+class TypeDao extends AbstractDao implements ITypeDao
 {
+    /**
+     * TypeDao constructor.
+     */
+    public function __construct() {
+        parent::init();
+    }
+
+    /**
+     * @return array|mixed
+     */
     public static function getAllTypes() {
         try {
             $types = array();
             $stmt = self::$pdo->prepare(
                 "SELECT type_id, name 
-            FROM types;");
+            FROM types");
             $stmt->execute();
 
             while($row = $stmt->fetch(\PDO::FETCH_ASSOC)){

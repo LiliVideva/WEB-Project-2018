@@ -1,27 +1,36 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: User
- * Date: 5/7/2018
- * Time: 4:49 PM
- */
 
 namespace model;
 
+/**
+ * Class Group
+ * @package model
+ */
 class Group
 {
     private $id;
     private $name;
 
-    public function __construct($id,$name) {
+    /**
+     * Group constructor.
+     * @param $id
+     * @param $name
+     */
+    public function __construct($id, $name) {
         $this->id = $id;
         $this->name = $name;
     }
 
+    /**
+     * @return mixed
+     */
     public function getId() {
         return $this->id;
     }
 
+    /**
+     * @return mixed
+     */
     public function getName() {
         return $this->name;
     }

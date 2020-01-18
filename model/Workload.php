@@ -1,13 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: User
- * Date: 5/7/2018
- * Time: 4:51 PM
- */
 
 namespace model;
 
+/**
+ * Class Workload
+ * @package model
+ */
 class Workload
 {
 
@@ -15,6 +13,12 @@ class Workload
     private $seminars;
     private $practices;
 
+    /**
+     * Workload constructor.
+     * @param $lectures
+     * @param $seminars
+     * @param $practices
+     */
     public function __construct($lectures, $seminars, $practices)
     {
         $this->lectures = $lectures;
@@ -22,16 +26,25 @@ class Workload
         $this->practices = $practices;
     }
 
+    /**
+     * @return mixed
+     */
     public function getLectures()
     {
         return $this->lectures;
     }
 
+    /**
+     * @return mixed
+     */
     public function getSeminars()
     {
         return $this->seminars;
     }
 
+    /**
+     * @return mixed
+     */
     public function getPractices()
     {
         return $this->practices;

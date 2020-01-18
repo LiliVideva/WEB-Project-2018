@@ -1,20 +1,27 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: User
- * Date: 5/11/2018
- * Time: 5:53 PM
- */
 
 namespace model\dao;
 use model\Lecturer;
+use model\Title;
 
-require_once "AbstractDao.php";
-require_once "..\Lecturer.php";
 
-class LecturerDao extends AbstractDao
+/**
+ * Class LecturerDao
+ * @package model\dao
+ */
+class LecturerDao extends AbstractDao implements ILecturerDao
 {
+    /**
+     * LecturerDao constructor.
+     */
+    public function __construct()
+    {
+        parent::init();
+    }
 
+    /**
+     * @return array
+     */
     public static function getAllLecturers() {
         try {
             $lecturers = array();
@@ -36,6 +43,10 @@ class LecturerDao extends AbstractDao
         return $lecturers;
     }
 
+    /**
+     * @param $subjectId
+     * @return array
+     */
     public static function getAllSubjectLecturers($subjectId) {
         try {
             $lecturers = array();
@@ -57,6 +68,28 @@ class LecturerDao extends AbstractDao
             throw $e;
         }
         return $lecturers;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getAllTitles() {
+        try {
+            $titles = array();
+            $stmt = self::$pdo->prepare(
+                "SELECT title_id, name 
+            FROM titles;");
+            $stmt->execute();
+
+            while($row = $stmt->fetch(\PDO::FETCH_ASSOC)){
+                $title = new Title($row["title_id"],$row["name"]);
+                $titles[] = $title;
+            }
+        }
+        catch (\PDOException $e){
+            throw $e;
+        }
+        return $titles;
     }
 
     /**

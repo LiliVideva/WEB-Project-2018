@@ -1,21 +1,26 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: User
- * Date: 5/11/2018
- * Time: 6:25 PM
- */
 
 namespace model\dao;
 
 use model\Major;
 
-require_once "AbstractDao.php";
-require_once "..\Major.php";
-
-class MajorDao extends AbstractDao
+/**
+ * Class MajorDao
+ * @package model\dao
+ */
+class MajorDao extends AbstractDao implements IMajorDao
 {
+    /**
+     * MajorDao constructor.
+     */
+    public function __construct()
+    {
+        parent::init();
+    }
 
+    /**
+     * @return array
+     */
     public static function getAllMajors() {
         try {
             $majors = array();

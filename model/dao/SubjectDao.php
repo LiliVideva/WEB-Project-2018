@@ -1,74 +1,111 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: User
- * Date: 5/11/2018
- * Time: 6:29 PM
- */
 
 namespace model\dao;
 
-use model\Lecturer;
 use model\Subject;
-use model\Workload;
+use model\dao\TypeDao;
+use model\dao\GroupDao;
 
-require_once "AbstractDao.php";
-require_once "..\Subject.php";
-
-class SubjectDao extends AbstractDao
+/**
+ * Class SubjectDao
+ * @package model\dao
+ */
+class SubjectDao extends AbstractDao implements ISubjectDao
 {
-
-    public static function getAllSubjects(){
-
+    /**
+     * SubjectDao constructor.
+     */
+    public function __construct()
+    {
+        parent::init();
     }
 
-    //function to add new subject --> add data in 4 tables with transaction
-    //parameter --> object Subject with everything except id
-    public static function addNewSubject(Subject $subject) {
+
+    /**
+     * @param $type
+     * @param $major
+     * @param $course
+     * @param $group
+     * @param $lecturer
+     * @param $sort
+     * @return array
+     */
+    public static function getSubjects($type, $major, $course, $group, $lecturer, $sort)
+    {
         try {
-            self::$pdo->beginTransaction();
-            $stmt = self::$pdo->prepare("INSERT INTO subjects (name, credits, group_id, type_id) VALUES (?,?,?,?)");
-            $params = array($subject->getName(),$subject->getCredits(),$subject->getGroupId(),$subject->getTypeId());
-            $stmt->execute($params);
+            $subjects = [];
+            $workloads = [];
+            $lecturers= [];
+            $params = [];
+            $sql =  "SELECT s.subject_id, s.name as name, t.name as type, m.name as major, c.course as course, g.name as groups,
+                      w.lectures as lectures, w.seminars as seminars, w.practices as practices, s.credits as credits, 
+                      tt.name as title, l.name as lecturer
+                      FROM subject as s
+                      JOIN types as t ON s.type_id = t.type_id
+                      JOIN subject_has_majors as shm ON s.subject_id = shm.subject_id 
+						LEFT JOIN majors as m ON shm.major_id=m.major_id
+						LEFT JOIN courses as c ON shm.min_course_id=c.course_id
+                      JOIN groups as g ON s.group_id = g.group_id 
+                      JOIN workloads as w ON s.subject_id=w.subject_id
+                      JOIN subject_has_lecturers as shl ON s.subject_id=shl.subject_id
+						LEFT JOIN lecturers as l  ON shl.lecturer_id=l.lecturer_id
+                        LEFT JOIN titles as tt ON l.title_id=tt.title_id
+                      WHERE t.type_id = ? AND m.major_id LIKE ? AND c.course_id LIKE ? AND g.group_id LIKE ? AND l.lecturer_id LIKE ?";
 
-            //get auto generated id of the subject
-            $last_id = self::$pdo->lastInsertId();
-            $subject->setId($last_id);
+              if ($sort == "type") {
+                $sql .= " ORDER BY t.name ASC";
+              }elseif ($sort == "major"){
+                $sql .= " ORDER BY m.name ASC";
+              }elseif ($sort == "course"){
+                $sql .= " ORDER BY c.course ASC";
+              }elseif ($sort == "group"){
+                $sql .= " ORDER BY g.name ASC";
+              }elseif ($sort == "lecturer"){
+                $sql .= " ORDER BY l.name ASC";
+              }else {
+                $sql .= " ORDER BY s.name ASC";
+              }
+			  
+			   if ($major == "none") {
+                $major = "%";
+              }
+			  if ($course == "none"){
+                $course = "%";
+              }
+			  if ($group == "none"){
+                $group = "%";
+              }
+			  if ($lecturer == "none"){
+                $lecturer = "%";
+              }
 
-            $stmt = self::$pdo->prepare("INSERT INTO workloads (lectures, seminars, practices, subject_id) VALUES (?,?,?,?)");
-            $workload = $subject->getWorkloads();
-            $params = array($workload->getLectures(),$workload->getSeminars(), $workload->getPractices(), $subject->getId());
-            $stmt->execute($params);
+            $stmt = self::$pdo->prepare($sql);
 
-            foreach ($subject->getLecturers() as $lecturer) {
-                $stmt = self::$pdo->prepare("INSERT INTO subject_has_lecturers (subject_id, lecturer_id) VALUES (?,?)");
-                $params = array($subject->getId(), $lecturer->getId());
-                $stmt->execute($params);
-            }
+            $stmt->execute(array($type,$major,$course,$group,$lecturer));
+            /*While ($query_result = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+                $name=$query_result["name"];
+                $type=$query_result["type"];
+                $majors=$query_result["major"];
+                $courses=$query_result["course"];
+                $group=$query_result["groups"];
 
-            foreach ($subject->getMajors() as $majorInfo) {
+                $workloads[]=$query_result["lectures"];
+                $workloads[]=$query_result["seminars"];
+                $workloads[]=$query_result["practices"];
 
-                $majorId = $majorInfo["major"];//only major id
-                $minCourse = $majorInfo["minCourse"];//only course id
-                $onlyCourse = $majorInfo["onlyCourse"];//only course id
+                $credits=$query_result["credits"];
 
-                if((!(is_null($minCourse)))&&is_null($onlyCourse)){
-                    $stmt = self::$pdo->prepare("INSERT INTO subject_has_majors (subject_id, major_id, min_course_id) VALUES (?,?)");
-                    $params = array($subject->getId(), $majorId, $minCourse);
-                    $stmt->execute($params);
-                }
-                else if((!(is_null($onlyCourse)))&&is_null($minCourse)){
-                    $stmt = self::$pdo->prepare("INSERT INTO subject_has_majors (subject_id, major_id, only_course_id) VALUES (?,?)");
-                    $params = array($subject->getId(), $majorId, $onlyCourse);
-                    $stmt->execute($params);
-                }
+                $lecturers[]=$query_result["title"];
+                $lecturers[]=$query_result["lecturer"];
 
-            }
+                $subjects = new Subject($name,$type,$majors,$courses,$group,$workloads,$credits,$lecturers);
+            }*/
+			
+			$subjects = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
-            self::$pdo->commit();
-        }
-        catch (\PDOException $e){
-            self::$pdo->rollBack();
+            return $subjects;
+
+        } catch (\PDOException $e) {
             throw $e;
         }
     }

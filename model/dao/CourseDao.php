@@ -1,20 +1,27 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: User
- * Date: 5/11/2018
- * Time: 5:32 PM
- */
 
 namespace model\dao;
 
 use model\Course;
 
-require_once "AbstractDao.php";
-require_once "..\Course.php";
 
-class CourseDao extends AbstractDao
+/**
+ * Class CourseDao
+ * @package model\dao
+ */
+class CourseDao extends AbstractDao implements ICourseDao
 {
+    /**
+     * CourseDao constructor.
+     */
+    public function __construct()
+    {
+        parent::init();
+    }
+
+    /**
+     * @return array
+     */
     public static function getAllCourses() {
         try {
             $courses = array();

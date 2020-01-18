@@ -1,0 +1,34 @@
+<div class="form">
+
+
+         <div class="message" id="register-form-message-div"></div>
+
+        <form onsubmit="return validateRegisterFormOnSubmit(this);" action="./handle_requests.php?target=user&action=register" method="post" id="register-form">
+		<h4>Регистрация</h4>
+            <br>
+
+            Име<input type="text" id="first_name" name="first_name" placeholder="Име" required> <br>
+
+            Фамилия<input type="text" id="last_name" name="last_name" placeholder="Фамилия" required> <br>
+
+            Имейл адрес<input type="email" id="email" name="email" placeholder="Имейл адрес" required> <br>
+
+            <p class="message">
+                Семестриалност<select  id="type_select" name="type" required>
+
+                <option value="1">Бакалавър</option>
+                <option value="2">Магистър</option>
+
+                </select> </p> <br>
+
+            Парола<input type="password" id="password" name="password" placeholder="Парола" required> <br>
+
+            Повторена парола<input type="password" name="password_repeat" placeholder="Повторена парола" required> <br>
+
+            <input type="submit" name="register_button" value="Регистрация">
+
+
+            <p class="message"><a href="index.php?page=login">Вече сте регистиран?</a> </p>
+
+        </form>
+    </div>

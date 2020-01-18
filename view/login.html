@@ -1,0 +1,15 @@
+    <div class="form" id="login-form" >
+
+        <form onsubmit="return validateLoginFormOnSubmit(this)"  action="./handle_requests.php?target=user&action=login" method="post" >
+		<h4>Вписване</h4>
+            <br>
+
+            Имейл адрес<input type="email" name="email" placeholder="Имейл адрес" required> <br>
+
+            Парола<input type="password" name="password" placeholder="Парола" required> <br>
+
+            <input  type="submit" value="Вписване" name="login_button">
+
+            <p class="message"><a href="index.php?page=register">Не сте регистриран все още?</a></p>
+        </form>
+    </div>

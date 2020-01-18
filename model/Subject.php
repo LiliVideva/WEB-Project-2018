@@ -2,52 +2,101 @@
 
 namespace model;
 
+/**
+ * Class Subject
+ * @package model
+ */
 class Subject
 {
 
     private $id;
     private $name;
-    private $credits;
-    private $group;
-    private $type;
-
-    private $workloads;//Workload object
+    private $type; // type as string
     private $majors;//map from majors and minimum course and only course
+    private $courses;//array of courses
+    private $group; //group as string
+    private $workloads;//Workload object
+    private $credits;
     private $lecturers;//array from Lecturer objects
+    private $show_to_admin;
 
-    public function __construct($name, $credits, $group, $type)
+    /**
+     * Subject constructor.
+     * @param $name
+     * @param $type
+     * @param $majors
+     * @param $courses
+     * @param $group
+     * @param $workloads
+     * @param $credits
+     * @param $lecturers
+     */
+    public function __construct($name, $type, $majors, $courses, $group, $workloads, $credits, $lecturers)
     {
         $this->name = $name;
-        $this->credits = $credits;
-        $this->group = $group;
         $this->type = $type;
-        $this->majors = array();
-        $this->lecturers = array();
+        $this->majors = $majors;
+        $this->courses = $courses;
+        $this->group = $group;
+        $this->workloads = $workloads;
+        $this->credits = $credits;
+        $this->lecturers = $lecturers;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getShowToAdmin()
+    {
+        return $this->show_to_admin;
+    }
+
+    /**
+     * @param $show_to_admin
+     */
+    public function setShowToAdmin($show_to_admin)
+    {
+        $this->show_to_admin = $show_to_admin;
+    }
+
+    /**
+     * @return mixed
+     */
     public function getId()
     {
         return $this->id;
     }
 
+    /**
+     * @return mixed
+     */
     public function getName()
     {
         return $this->name;
     }
 
+    /**
+     * @return mixed
+     */
     public function getCredits()
     {
         return $this->credits;
     }
 
-    public function getGroupId()
+    /**
+     * @return mixed
+     */
+    public function getGroup()
     {
-        return $this->groupId;
+        return $this->group;
     }
 
-    public function getTypeId()
+    /**
+     * @return mixed
+     */
+    public function getType1()
     {
-        return $this->typeId;
+        return $this->type;
     }
 
     /**
@@ -57,7 +106,6 @@ class Subject
     {
         return $this->workloads;
     }
-
     /**
      * @return array
      */
@@ -75,6 +123,14 @@ class Subject
     }
 
     /**
+     * @return mixed
+     */
+    public function getCourses()
+    {
+        return $this->courses;
+    }
+
+    /**
      * @param mixed $id
      */
     public function setId($id)
@@ -83,11 +139,60 @@ class Subject
     }
 
     /**
+     * @param $name
+     */
+    public function setName($name)
+    {
+        $this->name=$name;
+    }
+
+    /**
+     * @param $type
+     */
+    public function setType($type)
+    {
+        $this->type=$type;
+    }
+
+    /**
      * @param array $majors
      */
     public function setMajors($majors)
     {
         $this->majors = $majors;
+    }
+
+
+    /**
+     * @param $courses
+     */
+    public function setCourses($courses)
+    {
+        $this->courses=$courses;
+    }
+
+    /**
+     * @param $group
+     */
+    public function setGroup($group)
+    {
+        $this->group=$group;
+    }
+
+    /**
+     * @param $workloads
+     */
+    public function setWorkloads($workloads)
+    {
+        $this->workloads=$workloads;
+    }
+
+    /**
+     * @param $credits
+     */
+    public function setCredits($credits)
+    {
+        $this->credits=$credits;
     }
 
     /**
